@@ -1,20 +1,22 @@
+# Modifiable variables
 pitch_min = 50
 time_step = 0.3
 silence_threshold = -35
 min_pause = 0.1
 min_voiced = 0.1
+
 tier = 1
 
+x = REPLACE_WITH_#_OF_PARTICIPANTS
+for participant from 1 to x
+    directory$ = "Split_Audio/'participant'/" 
+    createDirectory: "Sound_Analysis/'participant'/"
 
-createDirectory: "Sound_Analysis"
-
-
-for participant from 1 to 30
-	directory$ = "Split_Audio/Participant_'participant'" 
     
     tier = 1
-    Create Strings as file list... list 'directory$'*'.wav'
+    Create Strings as file list: "list", "'directory$'*.wav"
     number_files = Get number of strings
+
 
     for ifile to number_files
     	
@@ -26,14 +28,17 @@ for participant from 1 to 30
     	lengthSound = length (objectname$)
     	
     	textgrid = To TextGrid (silences)...  100 0.01 -45 0.05 0.1 silence laughter
-    	# pop-up of sound and textgrid to manually confirm intervals
-        	selectObject: soundfile ,textgrid
-       	 View & Edit
+    	
+	# pop-up of sound and textgrid to manually confirm intervals
+	# Uncomment the following 5 lines if post-correction is needed
+
+        #	selectObject: soundfile ,textgrid
+       	# View & Edit
     
-       	 beginPause: "Annotation"
-            	comment: "Press OK when done to save."
+       	 #beginPause: "Annotation"
+        #    	comment: "Press OK when done to save."
     
-        	endPause: "OK", 0
+        #	endPause: "OK", 0
     
     
     	selectObject: textgrid
@@ -73,7 +78,6 @@ for participant from 1 to 30
     			medianIntensity$ = "'medianIntensity$''meanIntensity', "
     			medianDuration$ = "'medianDuration$''duration', "
     		endif
-    directory$ = "Split_Audio" + "/" 
     		
     			
     	endfor
@@ -82,7 +86,7 @@ for participant from 1 to 30
     	meanDuration = totalLaughDuration/ laughCount
     	medianDuration$ = left$ (medianDuration$ ,length (medianDuration$)-2)
     	resultline$ = "'laughCount', 'percentageDuration', 'meanDuration', 'totalMeanIntensity''newline$''medianIntensity$''newline$''medianDuration$'" 
-    	appendFileLine: "Sound_Analysis/'reportname$'.txt", "'resultline$'"
+    	appendFileLine: "Sound_Analysis/'participant'/'reportname$'.txt", "'resultline$'"
     
     	select all
     	minus Strings list
